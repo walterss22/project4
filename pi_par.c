@@ -36,7 +36,8 @@ void* find_pi(uint64_t* number ){
         mult += pow(-1, i) * (1.0 / ((2 * i) + 1)); //use estimation algo
     }
     
-    #pragma omp critical {
+    #pragma omp critical
+    {
         *multiplier = *multiplier + mult;
     }
     return NULL; //return NULL
@@ -58,11 +59,12 @@ int main(int argc, char** argv){
     
     //get time taken
     clock_gettime(CLOCK_MONOTONIC, &start); //Start the clock!
-    #pragma omp parallel num_threads(THREADS){
+    #pragma omp parallel num_threads(THREADS)
+    {
         find_pi(&multiplier);
     }
 
-    pi *= multiplier;
+    pi *= *multiplier;
 
     clock_gettime(CLOCK_MONOTONIC, &end);   //Stops the clock!
 
