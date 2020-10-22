@@ -17,13 +17,13 @@ int THREADS = 10;
 
 long double* multiplier;
 
-void* find_pi(uint64_t* number ){
+void* find_pi(long double* number ){
     //C doesn't actually have Pi as a constant, but...
     //Most modern CPUs actually have an instruction to just load Pi into a register!
     //Some inline assembly here. This should work for all versions of GCC...
     uintptr_t rank = omp_get_thread_num();
     THREADS = omp_get_num_threads();
-    long double Pi = 4; //initialize Pi
+    //long double Pi = 4; //initialize Pi
     long double mult = 0; //initialize multiplier
     int block = TERMS/THREADS; //get block size
     uint64_t start = block * rank;

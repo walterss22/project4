@@ -17,7 +17,7 @@ int64_t SAMPLES = 1000000;
 int THREADS = 10;
 double* results;
 
-void* estimate(void* number){
+void* estimate(int number){
     srand(time(NULL));
     uintptr_t rank = (uintptr_t) number;
     double x = 0;
@@ -49,23 +49,11 @@ int main(int argc, char** argv){
     SAMPLES /= THREADS;
     //get time taken
     clock_gettime(CLOCK_MONOTONIC, &start); //Start the clock!
-
-    pthread_t * handlers = malloc(sizeof(pthread_t) * THREADS);//allocate mem for threads
     results = malloc(sizeof(double) * THREADS);
-
-    //create threads
-    for(int i = 0; i < THREADS; i++){
-        pthread_create(&handlers[i], NULL, estimate, (void*) i);
+    #pragma omp parallel num_threads(THREADS)
+    {
+        estimate(omp_get_thread_num());
     }
-
-    //join threads
-    for(int i = 0; i < THREADS; i ++){
-        pthread_join(handlers[i], NULL);
-    }
-    
-    //free mem
-    free(handlers);
-
     //gather results
     for(int i = 0; i < THREADS; i++){
         est += results[i];
