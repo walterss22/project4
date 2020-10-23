@@ -21,6 +21,7 @@ void* find_pi(long double* number ){
     //C doesn't actually have Pi as a constant, but...
     //Most modern CPUs actually have an instruction to just load Pi into a register!
     //Some inline assembly here. This should work for all versions of GCC...
+  printf("attempt find pi\n");
     uintptr_t rank = omp_get_thread_num();
     THREADS = omp_get_num_threads();
     //long double Pi = 4; //initialize Pi
@@ -28,12 +29,13 @@ void* find_pi(long double* number ){
     int block = TERMS/THREADS; //get block size
     uint64_t start = block * rank;
     uint64_t end = block * (rank + 1);
+    printf("Establish start/end\n");
     if(rank == THREADS -1){
         end = TERMS;
     }
 
     for (int i = start; i < end; i++){
-        mult += pow(-1, i) * (1.0 / ((2 * i) + 1)); //use estimation algo
+        mult += pow(-1.0, i) * (1.0 / ((2 * i) + 1)); //use estimation algo
     }
     
     #pragma omp critical
@@ -44,10 +46,16 @@ void* find_pi(long double* number ){
 }
 
 int main(int argc, char** argv){
+  printf("start\n");
     struct timespec start, end; //structs used for timing purposes, it has two memebers, a tv_sec which is the current second, and the tv_nsec which is the current nanosecond.
+    printf("timespace\n");
     double time_diff;
-    long double pi = 0;
+    long double pi = 4;
+    printf("oh its definitely this isn't it\n");
+    multiplier = malloc(sizeof(long double));
+    printf("malloc success\n");
     *multiplier = 0;
+    printf("here we go\n");
 
     //gather command line arg
     if(argc >= 2){
@@ -59,10 +67,13 @@ int main(int argc, char** argv){
     
     //get time taken
     clock_gettime(CLOCK_MONOTONIC, &start); //Start the clock!
+    printf("bottom of the ninth\n");
     #pragma omp parallel num_threads(THREADS)
     {
         find_pi(&multiplier);
     }
+
+    printf("multiplier is %Lf\n",*multiplier);
 
     pi *= *multiplier;
 
@@ -73,7 +84,7 @@ int main(int argc, char** argv){
 
     //print results
     printf("The time taken is %f \n", time_diff);
-    printf("%lld terms used.\n", TERMS);
+    printf("%ld terms used.\n", TERMS);
     printf("Pi is %.20Lf\n", pi);
     return 0;
 }
