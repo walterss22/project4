@@ -10,7 +10,7 @@ This program uses omp to implement an odd-even bubble sort
 #include <stdint.h>
 #include <inttypes.h>
 #include <time.h>
-//#include <omp.h>
+#include <omp.h>
 
 
 
