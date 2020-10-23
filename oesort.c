@@ -10,6 +10,7 @@ This program uses omp to implement an odd-even bubble sort
 #include <stdint.h>
 #include <inttypes.h>
 #include <time.h>
+//#include <omp.h>
 
 
 
@@ -35,7 +36,7 @@ int64_t* Populate(char* fname, uint64_t* size){
 
 int my_sort(int64_t* input, uint64_t size){
     //I don't know how to sort so just return 0
-    #pragma omp parallel for
+    //#pragma omp parallel for
         for(uint64_t i = 0; i < size; i ++){ //outer loop
             for(uint64_t ndx = i % 2; ndx < size-1; ndx += 2){ //inner loop
                 //printf("Is %lld > %lld?\n", input[ndx], input[ndx+1]);
