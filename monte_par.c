@@ -23,15 +23,17 @@ void* estimate(int number){
     double x = 0;
     double y = 0;
     uint64_t hits = 0;
-    for(uint64_t i = 0; i < SAMPLES; i++){
+    for(uint64_t i = 0; i < SAMPLES/THREADS; i++){
         x = ((double)rand()/(double)RAND_MAX); //cast to doubles, divide by RAND_MAX 
         y = ((double)rand()/(double)RAND_MAX);
         if(sqrt(pow(x,2) + pow(y,2) <= 1 )){
             hits +=1;
         }
     }
-    printf("%f\n", ((double)hits / (double)(SAMPLES*THREADS)));
-    results[rank] = ((double)hits/(double)(SAMPLES*THREADS));
+    printf("%f\n", ((double)hits / (double)SAMPLES));
+    // printf("%f\n", ((double)hits / (double)(SAMPLES*THREADS)));
+    // results[rank] = ((double)hits/(double)(SAMPLES*THREADS));
+    results[rank] = ((double) hits/ (double)SAMPLES);
     return NULL;
 }
 
