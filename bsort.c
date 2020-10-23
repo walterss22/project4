@@ -23,7 +23,6 @@ int64_t* Populate(char* fname, uint64_t* size){
     //printf("size: %lld\n", *size);
     int64_t* array = malloc((*size) * sizeof(int64_t)); //malloc for array
     //printf("size: %lld\n", *size);
-
     for(uint64_t ndx = 0; ndx < *size; ndx++){ //populate array
         fscanf(input, "%lld", &array[ndx]);
         //printf("%llu: %lld\n", ndx, array[ndx]);
