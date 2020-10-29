@@ -3,6 +3,7 @@ Author: Scott Walters
 CSCI-320
 
 This program uses omp to implement an odd-even bubble sort
+*** DON'T SEE SPEEDUP UNTIL ~10,000 TERMS***
 */
 
 #include <stdio.h>
@@ -35,17 +36,22 @@ int64_t* Populate(char* fname, uint64_t* size){
 
 int my_sort(int64_t* input, uint64_t size){
     //I don't know how to sort so just return 0
-    #pragma omp parallel for
+  //#pragma omp parallel for
         for(uint64_t i = 0; i < size; i ++){ //outer loop
+	  #pragma omp parallel for
             for(uint64_t ndx = i % 2; ndx < size-1; ndx += 2){ //inner loop
                 //printf("Is %lld > %lld?\n", input[ndx], input[ndx+1]);
+	      
+	      //#pragma omp critical (swap)
+	      //{
                 if(input[ndx] > input[ndx + 1]){ //check for swap
-                    //printf("yes!\n");
+		  //printf("yes!\n");
                     int64_t temp = input[ndx];
                     input[ndx] = input[ndx + 1];
                     input[ndx + 1] = temp;
                     //printf("New order: %lld, %lld\n", input[ndx], input[ndx+1]);
-                } 
+		}
+		//} 
             }
             //printf("%lld\n", i);
         }
@@ -58,6 +64,7 @@ Returns 0 if not sorted, returns 1 if sorted
 */
 int is_sorted(int64_t* input, uint64_t size){
     for(uint64_t ndx = 0; ndx < size-1; ndx ++){
+      //printf("%lld\n", input[ndx]);
         if(input[ndx] > input[ndx + 1]){
             return 0;
         }
